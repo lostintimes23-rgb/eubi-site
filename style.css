@@ -242,3 +242,96 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   .form-row { grid-template-columns: 1fr; }
   .community-grid { grid-template-columns: 1fr; }
 }
+
+/* ── SCIENCE & FACTS ── */
+#science { padding: 100px 0; background: var(--bg2); }
+.facts-block { margin-bottom: 56px; }
+.facts-block-title {
+  font-size: 1.1em; font-weight: 700; color: var(--gold);
+  border-left: 3px solid var(--gold); padding-left: 14px;
+  margin-bottom: 28px; letter-spacing: 0.5px;
+}
+
+/* Solar stat cards */
+.science-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.sci-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 28px 20px; text-align: center;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.sci-card:hover { border-color: var(--gold); transform: translateY(-4px); }
+.sci-val { font-size: 2em; font-weight: 900; color: var(--gold); line-height: 1.1; }
+.sci-label { font-size: 0.85em; color: var(--text); margin: 8px 0 6px; font-weight: 600; }
+.sci-note { font-size: 0.75em; color: var(--muted); }
+
+/* kWh equivalents */
+.kwh-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; }
+.kwh-item {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 10px; text-align: center;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  transition: border-color 0.3s;
+}
+.kwh-item:hover { border-color: var(--gold); }
+.kwh-icon { font-size: 1.8em; }
+.kwh-val { font-size: 1em; font-weight: 800; color: var(--gold); }
+.kwh-desc { font-size: 0.72em; color: var(--muted); }
+
+/* UBI Pilot cards */
+.pilots-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.pilot-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; transition: border-color 0.3s;
+}
+.pilot-card:hover { border-color: var(--gold); }
+.pilot-flag { font-size: 2em; margin-bottom: 8px; }
+.pilot-name { font-size: 1em; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+.pilot-detail { font-size: 0.85em; color: var(--muted); margin-bottom: 10px; line-height: 1.5; }
+.pilot-result { font-size: 0.85em; color: var(--green); line-height: 1.5; }
+
+/* ── SCHEMATICS ── */
+#schematics { padding: 100px 0; background: var(--bg); }
+
+.schematic-tabs { display: flex; gap: 12px; margin-bottom: 32px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 10px 24px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg3); color: var(--muted); font-size: 0.9em; font-weight: 600;
+  cursor: pointer; transition: all 0.25s;
+}
+.tab-btn:hover { border-color: var(--gold); color: var(--gold); }
+.tab-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
+
+.schematic-panel { width: 100%; }
+.schematic-panel.hidden { display: none; }
+
+.schematic-svg {
+  width: 100%; border-radius: 12px;
+  border: 1px solid var(--border); display: block; margin-bottom: 24px;
+}
+
+.schematic-specs {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px; margin-top: 4px;
+}
+.spec-title { color: var(--gold); font-weight: 700; font-size: 1em; margin-bottom: 16px; }
+.spec-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 0.88em; gap: 20px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-row span:first-child { color: var(--muted); flex-shrink: 0; }
+.spec-row span:last-child { color: var(--text); text-align: right; }
+.spec-row.highlight span { color: var(--gold); font-weight: 700; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .science-grid { grid-template-columns: repeat(2, 1fr); }
+  .kwh-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .science-grid { grid-template-columns: 1fr 1fr; }
+  .kwh-grid { grid-template-columns: repeat(2, 1fr); }
+  .pilots-grid { grid-template-columns: 1fr; }
+  .spec-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+}

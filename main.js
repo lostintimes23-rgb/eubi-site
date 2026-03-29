@@ -126,3 +126,17 @@ function handleForm(formId, successId) {
 handleForm('comment-form',  'comment-success');
 handleForm('feedback-form', 'feedback-success');
 
+// ── Schematic tab switcher ────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.dataset.tab;
+    // Update buttons
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    // Update panels
+    document.querySelectorAll('.schematic-panel').forEach(panel => {
+      panel.classList.toggle('hidden', panel.id !== `tab-${target}`);
+    });
+  });
+});
+
