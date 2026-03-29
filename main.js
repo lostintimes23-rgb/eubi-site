@@ -99,7 +99,8 @@ document.getElementById('rating-stars')?.addEventListener('mouseleave', () => {
 function handleForm(formId, successId) {
   const form    = document.getElementById(formId);
   const success = document.getElementById(successId);
-  if (!form) return;
+  // Guard: if either element is missing, bail out silently
+  if (!form || !success) return;
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -108,15 +109,24 @@ function handleForm(formId, successId) {
     btn.textContent = 'Sending...';
 
     try {
+      // URLSearchParams correctly serializes all fields including the hidden
+      // form-name field that Netlify requires to identify the form
       const body = new URLSearchParams(new FormData(form)).toString();
-      await fetch('/', {
+      const res  = await fetch('/', {
         method:  'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body
+        body,
       });
+
+      // fetch() only throws on network errors — NOT on HTTP 4xx/5xx.
+      // Check res.ok explicitly so a Netlify 404 (unregistered form) or
+      // 500 is treated as a failure, not a silent success.
+      if (!res.ok) throw new Error(`Netlify responded ${res.status}`);
+
       form.classList.add('hidden');
       success.classList.remove('hidden');
-    } catch {
+    } catch (err) {
+      console.error('[eubi-form]', err);
       btn.disabled    = false;
       btn.textContent = 'Try again — something went wrong';
     }

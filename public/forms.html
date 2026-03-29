@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  Netlify Forms detection file.
+
+  Vite processes index.html as an entry point, which can sometimes interfere
+  with Netlify's post-build HTML crawler that looks for data-netlify="true".
+  Files inside /public are copied verbatim into /dist with no transformation,
+  so this plain HTML is always readable by Netlify's crawler.
+
+  Both forms here mirror the field names used in the live AJAX forms in
+  index.html exactly — Netlify uses these definitions to build the schema.
+  Users never visit this page; it exists solely for Netlify's form detector.
+-->
+<html lang="en">
+<head><meta charset="UTF-8"><title>Netlify Forms</title></head>
+<body>
+
+  <!-- ── Comments form ─────────────────────────────────────────────────── -->
+  <!--
+    name="comments" must match:
+      1. The `name` attribute on the <form> in index.html
+      2. The value of the hidden <input name="form-name"> submitted by the JS
+  -->
+  <form name="comments" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name"  value="comments" />
+    <input type="text"   name="bot-field" />
+    <input type="text"   name="name"      />
+    <input type="email"  name="email"     />
+    <textarea            name="comment"   ></textarea>
+  </form>
+
+  <!-- ── Feedback form ─────────────────────────────────────────────────── -->
+  <!--
+    name="feedback" must match:
+      1. The `name` attribute on the <form> in index.html
+      2. The value of the hidden <input name="form-name"> submitted by the JS
+  -->
+  <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name"  value="feedback" />
+    <input type="text"   name="bot-field" />
+    <input type="text"   name="name"      />
+    <input type="hidden" name="rating"    />
+    <select              name="role"      >
+      <option>Just curious</option>
+      <option>Curious person</option>
+      <option>Community organizer</option>
+      <option>Engineer / Developer</option>
+      <option>Investor / Donor</option>
+      <option>Researcher / Academic</option>
+      <option>Journalist / Media</option>
+    </select>
+    <textarea            name="message"   ></textarea>
+  </form>
+
+</body>
+</html>
+
