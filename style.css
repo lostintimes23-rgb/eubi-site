@@ -539,111 +539,59 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 }
 #about-founders h2 { font-size: clamp(2em, 5vw, 3.2em); margin-bottom: 0; }
 
-/* ── Aura keyframes ── */
+/* ── Aura keyframes — opacity + blur only, no transform (centering uses top/left) ── */
 @keyframes aura-pulse {
-  0%   { opacity: 0.30; transform: scale(0.96) skew(0deg,   0deg);   filter: blur(14px); }
-  8%   { opacity: 1.00; transform: scale(1.14) skew(-2deg,  1deg);   filter: blur(8px);  }
-  12%  { opacity: 0.35; transform: scale(1.02) skew(0deg,   0deg);   filter: blur(18px); }
-  20%  { opacity: 0.90; transform: scale(1.18) skew(2deg,  -1deg);   filter: blur(6px);  }
-  28%  { opacity: 0.40; transform: scale(1.00) skew(0deg,   0deg);   filter: blur(20px); }
-  35%  { opacity: 1.00; transform: scale(1.22) skew(-3deg,  2deg);   filter: blur(4px);  }
-  42%  { opacity: 0.30; transform: scale(0.98) skew(0deg,   0deg);   filter: blur(22px); }
-  50%  { opacity: 0.95; transform: scale(1.16) skew(1deg,  -2deg);   filter: blur(7px);  }
-  58%  { opacity: 0.35; transform: scale(1.01) skew(0deg,   0deg);   filter: blur(19px); }
-  65%  { opacity: 1.00; transform: scale(1.20) skew(-2deg,  1deg);   filter: blur(5px);  }
-  72%  { opacity: 0.40; transform: scale(0.97) skew(0deg,   0deg);   filter: blur(21px); }
-  80%  { opacity: 0.85; transform: scale(1.12) skew(3deg,  -1deg);   filter: blur(9px);  }
-  90%  { opacity: 0.30; transform: scale(0.99) skew(0deg,   0deg);   filter: blur(16px); }
-  100% { opacity: 0.30; transform: scale(0.96) skew(0deg,   0deg);   filter: blur(14px); }
+  0%   { opacity: 0.50; filter: blur(22px); }
+  20%  { opacity: 0.75; filter: blur(16px); }
+  40%  { opacity: 0.55; filter: blur(24px); }
+  60%  { opacity: 0.85; filter: blur(14px); }
+  80%  { opacity: 0.60; filter: blur(20px); }
+  100% { opacity: 0.50; filter: blur(22px); }
 }
 
-@keyframes aura-crackle {
-  0%,100% { transform: translate(-50%, -50%) scale(1.00) rotate(0deg);   }
-  10%      { transform: translate(-50%, -50%) scale(1.15) rotate(4deg);   }
-  20%      { transform: translate(-50%, -50%) scale(0.96) rotate(-3deg);  }
-  30%      { transform: translate(-50%, -50%) scale(1.20) rotate(2deg);   }
-  40%      { transform: translate(-50%, -50%) scale(0.98) rotate(-5deg);  }
-  50%      { transform: translate(-50%, -50%) scale(1.18) rotate(3deg);   }
-  60%      { transform: translate(-50%, -50%) scale(0.97) rotate(-2deg);  }
-  70%      { transform: translate(-50%, -50%) scale(1.22) rotate(5deg);   }
-  80%      { transform: translate(-50%, -50%) scale(0.99) rotate(-4deg);  }
-  90%      { transform: translate(-50%, -50%) scale(1.10) rotate(1deg);   }
+@keyframes aura-drift {
+  0%   { transform: scale(1.00); }
+  33%  { transform: scale(1.10); }
+  66%  { transform: scale(1.05); }
+  100% { transform: scale(1.00); }
 }
 
 .founders-logo-wrap {
   display: flex; flex-direction: column; align-items: center;
   gap: 18px; margin: 48px auto 64px;
-  position: relative; /* needed for ::before positioning */
+  position: relative;
 }
 
-/* ── The lightning aura — pinned to the SVG top edge ── */
+/* ── Aura — centered on the 148px SVG via top/left math, no transform ── */
+/* SVG: 148px. Aura: 220px. Offset = (220 - 148) / 2 = 36px */
 .founders-logo-wrap::before {
   content: '';
   position: absolute;
-  /* Center precisely over the 148px SVG: aura is 260px, offset = (260-148)/2 = 56px above SVG top */
-  top: -56px;
-  left: 50%;
-  transform: translate(-50%, 0);
-  width: 260px; height: 260px;
+  top: -36px;                      /* pulls aura up so it's centered on SVG */
+  left: calc(50% - 110px);        /* 110px = half of 220px aura width       */
+  width: 220px; height: 220px;
   border-radius: 50%;
   background:
-    /* white flash core — mimics lightning discharge center */
-    radial-gradient(circle 30px at 50% 50%, rgba(255,255,255,0.65) 0%, transparent 100%),
-    /* goldenrod lightning spikes — left quadrant */
-    conic-gradient(from 200deg at 38% 50%,
-      transparent 0deg, rgba(184,134,11,0.90) 4deg, transparent 8deg,
-      transparent 18deg, rgba(255,200,50,0.80) 20deg, transparent 24deg,
-      transparent 38deg, rgba(184,134,11,0.70) 40deg, transparent 44deg),
-    /* violet lightning spikes — right quadrant */
-    conic-gradient(from 20deg at 62% 50%,
-      transparent 0deg, rgba(153,58,254,0.90) 4deg, transparent 8deg,
-      transparent 20deg, rgba(200,130,255,0.80) 22deg, transparent 26deg,
-      transparent 40deg, rgba(153,58,254,0.70) 42deg, transparent 46deg),
-    /* soft base glow — goldenrod left */
-    radial-gradient(ellipse 55% 65% at 35% 50%, rgba(184,134,11,0.55) 0%, transparent 65%),
-    /* soft base glow — violet right */
-    radial-gradient(ellipse 55% 65% at 65% 50%, rgba(153,58,254,0.50) 0%, transparent 65%),
-    /* ambient fusion core */
-    radial-gradient(ellipse 80% 80% at 50% 50%, rgba(110,50,180,0.20) 0%, transparent 75%);
+    radial-gradient(ellipse 60% 70% at 38% 50%, rgba(184,134,11,0.70) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 70% at 62% 50%, rgba(153,58,254,0.65) 0%, transparent 65%),
+    radial-gradient(ellipse 85% 85% at 50% 50%, rgba(110,50,170,0.22) 0%, transparent 78%);
   z-index: 0;
-  animation: aura-pulse   1.6s steps(1, end) infinite,
-             aura-crackle 2.2s ease-in-out   infinite;
+  animation: aura-pulse 3s ease-in-out infinite,
+             aura-drift 5s ease-in-out infinite;
   pointer-events: none;
-}
-
-@keyframes svg-zap {
-  0%,100% { filter: drop-shadow(0 0  8px rgba(184,134,11,0.60))
-                    drop-shadow(0 0 18px rgba(153,58,254,0.50))
-                    drop-shadow(0 0  4px rgba(255,255,255,0.20)); }
-  10%     { filter: drop-shadow(0 0 24px rgba(255,220,80, 1.00))
-                    drop-shadow(0 0 40px rgba(184,134,11,0.90))
-                    drop-shadow(0 0 16px rgba(255,255,255,0.80)); }
-  12%     { filter: drop-shadow(0 0  6px rgba(184,134,11,0.40))
-                    drop-shadow(0 0 12px rgba(153,58,254,0.30))
-                    drop-shadow(0 0  2px rgba(255,255,255,0.10)); }
-  35%     { filter: drop-shadow(0 0 22px rgba(200,130,255,1.00))
-                    drop-shadow(0 0 38px rgba(153,58,254, 0.90))
-                    drop-shadow(0 0 14px rgba(255,255,255,0.70)); }
-  37%     { filter: drop-shadow(0 0  5px rgba(153,58,254, 0.35))
-                    drop-shadow(0 0 10px rgba(184,134,11, 0.25))
-                    drop-shadow(0 0  2px rgba(255,255,255,0.08)); }
-  65%     { filter: drop-shadow(0 0 20px rgba(255,200,60, 0.95))
-                    drop-shadow(0 0 36px rgba(184,134,11, 0.85))
-                    drop-shadow(0 0 12px rgba(255,255,255,0.65)); }
 }
 
 .founders-yin-yang {
   width: 148px; height: 148px;
-  position: relative; z-index: 1; /* sit above the aura */
-  animation: svg-zap 1.6s steps(1, end) infinite;
-  transition: transform 0.6s ease;
+  position: relative; z-index: 1;
+  filter: drop-shadow(0 0 12px rgba(184,134,11,0.55))
+          drop-shadow(0 0 24px rgba(153,58,254,0.45));
+  transition: filter 0.4s ease, transform 0.6s ease;
 }
 .founders-yin-yang:hover {
-  filter: drop-shadow(0 0 24px rgba(184,134,11,0.90))
-          drop-shadow(0 0 44px rgba(153,58,254,0.80))
-          drop-shadow(0 0 14px rgba(255,255,255,0.40));
+  filter: drop-shadow(0 0 22px rgba(184,134,11,0.85))
+          drop-shadow(0 0 42px rgba(153,58,254,0.75));
   transform: rotate(18deg) scale(1.06);
-  animation-play-state: paused;
 }
 
 .founders-tagline {
@@ -695,6 +643,12 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 @media (max-width: 720px) {
   .founders-grid { grid-template-columns: 1fr; }
   .founders-yin-yang { width: 112px; height: 112px; }
+  /* Aura: 180px. SVG: 112px. Offset = (180 - 112) / 2 = 34px */
+  .founders-logo-wrap::before {
+    width: 180px; height: 180px;
+    top: -34px;
+    left: calc(50% - 90px);
+  }
 }
 
 /* ── HUMANITY HAS DONE THE IMPOSSIBLE ── */
