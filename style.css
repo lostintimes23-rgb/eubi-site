@@ -24,12 +24,12 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
   background: rgba(8,8,16,0.85); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border); transition: all 0.3s;
 }
-.nav-inner { max-width: 1200px; margin: 0 auto; padding: 14px 24px;
+.nav-inner { max-width: 1400px; margin: 0 auto; padding: 12px 32px;
              display: flex; justify-content: space-between; align-items: center;
-             flex-wrap: nowrap; gap: 16px; }
-.logo { font-size: 1.3em; font-weight: 900; color: var(--gold); letter-spacing: 1px; white-space: nowrap; flex-shrink: 0; }
-nav ul { list-style: none; display: flex; gap: 18px; align-items: center; flex-wrap: nowrap; }
-nav ul a { text-decoration: none; color: var(--muted); font-size: 0.82em;
+             flex-wrap: nowrap; gap: 24px; }
+.logo { font-size: 1.2em; font-weight: 900; color: var(--gold); letter-spacing: 1px; white-space: nowrap; flex-shrink: 0; }
+nav ul { list-style: none; display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
+nav ul a { text-decoration: none; color: var(--muted); font-size: 0.8em;
            transition: color 0.2s; font-weight: 500; white-space: nowrap; }
 nav ul a:hover { color: var(--text); }
 .cta-btn { background: var(--gold) !important; color: #000 !important;
