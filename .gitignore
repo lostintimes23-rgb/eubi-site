@@ -6,3 +6,9 @@ dist/
 
 # Local Netlify folder
 .netlify
+
+# PM2 logs
+logs/
+
+# Local data store (submissions — keep out of git)
+data/comments.json

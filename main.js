@@ -169,8 +169,8 @@ async function loadComments() {
   list.innerHTML = '<div class="comments-loading"><span class="comments-spinner"></span> Loading posts…</div>';
 
   try {
-    const res = await fetch('/.netlify/functions/get-comments');
-    if (!res.ok) throw new Error(`Function returned ${res.status}`);
+    const res = await fetch('/api/comments');
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
 
     const posts = await res.json();
 
@@ -190,13 +190,15 @@ async function loadComments() {
 // Load on page open
 loadComments();
 
-// ── Form submissions (Netlify Forms via fetch) ────────────────────────────
+// ── Form submissions (local Express API) ─────────────────────────────────────
 
-// onSuccess is an optional callback invoked after a successful submission.
-function handleForm(formId, successId, onSuccess) {
+// formId     — HTML id of the <form>
+// successId  — HTML id of the success message element
+// endpoint   — Express API path to POST to (e.g. '/api/comments')
+// onSuccess  — optional callback after a successful submission
+function handleForm(formId, successId, endpoint, onSuccess) {
   const form    = document.getElementById(formId);
   const success = document.getElementById(successId);
-  // Guard: if either element is missing, bail out silently
   if (!form || !success) return;
 
   form.addEventListener('submit', async (e) => {
@@ -206,19 +208,14 @@ function handleForm(formId, successId, onSuccess) {
     btn.textContent = 'Sending...';
 
     try {
-      // URLSearchParams correctly serializes all fields including the hidden
-      // form-name field that Netlify requires to identify the form
       const body = new URLSearchParams(new FormData(form)).toString();
-      const res  = await fetch('/', {
+      const res  = await fetch(endpoint, {
         method:  'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body,
       });
 
-      // fetch() only throws on network errors — NOT on HTTP 4xx/5xx.
-      // Check res.ok explicitly so a Netlify 404 (unregistered form) or
-      // 500 is treated as a failure, not a silent success.
-      if (!res.ok) throw new Error(`Netlify responded ${res.status}`);
+      if (!res.ok) throw new Error(`Server responded ${res.status}`);
 
       form.classList.add('hidden');
       success.classList.remove('hidden');
@@ -233,8 +230,8 @@ function handleForm(formId, successId, onSuccess) {
 }
 
 // After posting a comment, reload the display so it appears immediately
-handleForm('comment-form',  'comment-success', loadComments);
-handleForm('feedback-form', 'feedback-success');
+handleForm('comment-form',  'comment-success',  '/api/comments', loadComments);
+handleForm('feedback-form', 'feedback-success', '/api/feedback');
 
 // ── Schematic tab switcher ────────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn => {
