@@ -531,6 +531,76 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   .mv2-mandate { padding: 12px 14px; }
 }
 
+/* ── FOUNDERS ── */
+#about-founders {
+  padding: 110px 0;
+  background: #06060d;
+  border-top: 1px solid #1a1a2e;
+}
+#about-founders h2 { font-size: clamp(2em, 5vw, 3.2em); margin-bottom: 0; }
+
+.founders-logo-wrap {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 18px; margin: 48px auto 64px;
+}
+
+.founders-yin-yang {
+  width: 148px; height: 148px;
+  filter: drop-shadow(0 0 16px rgba(255,215,0,0.22))
+          drop-shadow(0 0 30px rgba(74,144,217,0.18));
+  transition: filter 0.4s ease, transform 0.6s ease;
+}
+.founders-yin-yang:hover {
+  filter: drop-shadow(0 0 28px rgba(255,215,0,0.45))
+          drop-shadow(0 0 50px rgba(74,144,217,0.35));
+  transform: rotate(18deg) scale(1.06);
+}
+
+.founders-tagline {
+  font-size: 1.05em; font-style: italic;
+  color: var(--muted); letter-spacing: 0.4px; text-align: center;
+}
+
+.founders-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 28px; max-width: 860px; margin: 0 auto;
+}
+
+.founder-card {
+  display: flex; gap: 22px; align-items: flex-start;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,215,0,0.1);
+  border-radius: 14px; padding: 28px;
+  backdrop-filter: blur(8px);
+  transition: border-color 0.3s, transform 0.3s;
+}
+.founder-card:hover {
+  border-color: rgba(255,215,0,0.3);
+  transform: translateY(-3px);
+}
+
+.founder-initial {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4em; font-weight: 900; flex-shrink: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.founder-name {
+  font-size: 1.15em; font-weight: 800;
+  color: var(--gold); margin-bottom: 4px;
+}
+.founder-role {
+  font-size: 0.7em; letter-spacing: 3px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; margin-bottom: 12px;
+}
+.founder-bio { font-size: 0.88em; color: var(--muted); line-height: 1.75; }
+
+@media (max-width: 720px) {
+  .founders-grid { grid-template-columns: 1fr; }
+  .founders-yin-yang { width: 112px; height: 112px; }
+}
+
 /* ── HUMANITY HAS DONE THE IMPOSSIBLE ── */
 #impossible { padding: 110px 0; background: var(--bg2); }
 #impossible h2 { font-size: clamp(1.8em, 4vw, 3em); }
