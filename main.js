@@ -95,8 +95,68 @@ document.getElementById('rating-stars')?.addEventListener('mouseleave', () => {
   stars.forEach(s => s.style.opacity = parseInt(s.dataset.val) <= current ? '1' : '0.35');
 });
 
+// ── Helpers ───────────────────────────────────────────────────────────────
+
+// Escape user-supplied text before injecting into innerHTML.
+// Prevents XSS even if the server-side sanitize() in the function missed something.
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'short', day: 'numeric',
+  });
+}
+
+// ── Comments display ──────────────────────────────────────────────────────
+
+async function loadComments() {
+  const list = document.getElementById('comments-list');
+  if (!list) return;
+
+  // Show loading state
+  list.innerHTML = '<div class="comments-loading"><span class="comments-spinner"></span> Loading comments…</div>';
+
+  try {
+    const res = await fetch('/.netlify/functions/get-comments');
+    if (!res.ok) throw new Error(`Function returned ${res.status}`);
+
+    const comments = await res.json();
+
+    if (!Array.isArray(comments) || comments.length === 0) {
+      list.innerHTML = '<p class="comments-empty">No comments yet — be the first to share your thoughts!</p>';
+      return;
+    }
+
+    list.innerHTML = comments.map(c => `
+      <div class="comment-card">
+        <div class="comment-header">
+          <span class="comment-name">${escapeHtml(c.name)}</span>
+          <span class="comment-date">${formatDate(c.created_at)}</span>
+        </div>
+        <div class="comment-text">${escapeHtml(c.comment)}</div>
+      </div>
+    `).join('');
+
+  } catch (err) {
+    console.error('[loadComments]', err);
+    list.innerHTML = '<p class="comments-empty">Couldn\'t load comments right now — try refreshing.</p>';
+  }
+}
+
+// Load on page open
+loadComments();
+
 // ── Form submissions (Netlify Forms via fetch) ────────────────────────────
-function handleForm(formId, successId) {
+
+// onSuccess is an optional callback invoked after a successful submission.
+function handleForm(formId, successId, onSuccess) {
   const form    = document.getElementById(formId);
   const success = document.getElementById(successId);
   // Guard: if either element is missing, bail out silently
@@ -125,6 +185,8 @@ function handleForm(formId, successId) {
 
       form.classList.add('hidden');
       success.classList.remove('hidden');
+      if (typeof onSuccess === 'function') onSuccess();
+
     } catch (err) {
       console.error('[eubi-form]', err);
       btn.disabled    = false;
@@ -133,7 +195,8 @@ function handleForm(formId, successId) {
   });
 }
 
-handleForm('comment-form',  'comment-success');
+// After posting a comment, reload the display so it appears immediately
+handleForm('comment-form',  'comment-success', loadComments);
 handleForm('feedback-form', 'feedback-success');
 
 // ── Schematic tab switcher ────────────────────────────────────────────────
