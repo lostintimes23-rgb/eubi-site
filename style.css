@@ -975,8 +975,22 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   /* ── Impossible conclusion ──────────────────────────────────────────*/
   .impossible-conclusion { padding: 32px 28px; }
 
-  /* ── Vision timeline intermediate column widths ─────────────────────*/
-  .vision-item { grid-template-columns: 100px 20px 1fr; }
+  /* ── Vision timeline: collapse to single column on all mobile ───────
+     At ≤640px the 3-col grid already collapses, but on 640–768px the
+     cramped year+connector columns squeeze the content text badly.
+     Collapse the whole timeline here so text always gets full width.  */
+  .vision-item     { grid-template-columns: 1fr; }
+  .vision-connector { display: none; }
+  .vision-year     {
+    text-align: left;
+    margin-bottom: 6px;   /* breathing room between year tag and title */
+    font-size: 0.8em;
+    letter-spacing: 1px;
+  }
+  .vision-content  { padding-top: 0; }
+  .vision-item     { padding-bottom: 32px; }  /* tighter gap without connector line */
+  .vision-body p   { text-align: left; }
+  .vision-list li  { text-align: left; }
 
   /* ── Founders aura wrap: reduce top margin on tablet ───────────────*/
   .founders-logo-wrap { margin: 32px auto 48px; }
