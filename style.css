@@ -27,7 +27,9 @@ body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--tex
 .nav-inner { max-width: 1400px; margin: 0 auto; padding: 12px 32px;
              display: flex; justify-content: space-between; align-items: center;
              flex-wrap: nowrap; gap: 24px; }
-.logo { font-size: 1.2em; font-weight: 900; color: var(--gold); letter-spacing: 1px; white-space: nowrap; flex-shrink: 0; }
+.logo { font-size: 1.2em; font-weight: 900; color: var(--gold); letter-spacing: 1px; white-space: nowrap; flex-shrink: 0;
+        display: flex; align-items: center; gap: 8px; }
+.logo-yinyang { width: 28px; height: 28px; flex-shrink: 0; display: block; }
 nav ul { list-style: none; display: flex; gap: 10px; align-items: center; flex-wrap: nowrap; }
 nav ul a { text-decoration: none; color: var(--muted); font-size: 0.8em;
            transition: color 0.2s; font-weight: 500; white-space: nowrap; }
@@ -188,7 +190,8 @@ section h2 { font-size: clamp(1.6em, 3vw, 2.4em); font-weight: 800;
 footer { background: var(--bg); border-top: 1px solid var(--border); padding: 48px 24px;
          text-align: center; }
 .footer-inner .logo { font-size: 1.5em; font-weight: 900; color: var(--gold);
-                      margin-bottom: 12px; }
+                      margin-bottom: 12px; justify-content: center; }
+.footer-inner .logo-yinyang { width: 36px; height: 36px; }
 footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 
 /* RESPONSIVE */
