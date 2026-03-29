@@ -33,7 +33,9 @@ nav ul a { text-decoration: none; color: var(--muted); font-size: 0.8em;
            transition: color 0.2s; font-weight: 500; white-space: nowrap; }
 nav ul a:hover { color: var(--text); }
 .cta-btn { background: var(--gold) !important; color: #000 !important;
-           padding: 7px 14px; border-radius: 6px; font-weight: 700 !important; white-space: nowrap; }
+           padding: 7px 14px; border-radius: 6px; font-weight: 700 !important; white-space: nowrap;
+           /* Touch target: inline-flex so min-height applies without stretching the block */
+           display: inline-flex; align-items: center; min-height: 44px; }
 .cta-btn:hover { background: #ffe44d !important; }
 
 /* HERO */
@@ -226,8 +228,10 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 /* Star rating */
 .rating-group { display: flex; flex-direction: column; gap: 8px; }
 .rating-label { font-size: 0.83em; color: var(--muted); }
-.rating-stars { display: flex; gap: 6px; cursor: pointer; }
-.rating-stars span { font-size: 1.6em; opacity: 0.35; transition: opacity 0.15s, transform 0.15s; }
+.rating-stars { display: flex; gap: 6px; cursor: pointer; min-height: 44px; align-items: center; }
+.rating-stars span { font-size: 1.6em; opacity: 0.35; transition: opacity 0.15s, transform 0.15s;
+                     /* Pad each star so the tap zone meets the 44px minimum */
+                     padding: 4px; }
 .rating-stars span.active { opacity: 1; transform: scale(1.2); }
 .rating-stars span:hover { opacity: 0.8; }
 
@@ -553,10 +557,12 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 }
 
 @keyframes aura-drift {
-  0%   { transform: scale(1.00); }
-  33%  { transform: scale(1.10); }
-  66%  { transform: scale(1.05); }
-  100% { transform: scale(1.00); }
+  /* translateX(-50%) must be in every frame — otherwise scale() overwrites  *
+   * the centering translation and the aura jumps to the wrong position.     */
+  0%   { transform: translateX(-50%) scale(1.00); }
+  33%  { transform: translateX(-50%) scale(1.10); }
+  66%  { transform: translateX(-50%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1.00); }
 }
 
 .founders-logo-wrap {
@@ -565,13 +571,19 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   position: relative;
 }
 
-/* ── Aura — centered on the 148px SVG via top/left math, no transform ── */
-/* SVG: 148px. Aura: 220px. Offset = (220 - 148) / 2 = 36px */
+/* ── Aura — fluid centering via left:50% + transform: translateX(-50%) ──
+   Using a percentage-based left value means the anchor point always tracks
+   the container's horizontal midpoint regardless of screen width. The
+   translateX(-50%) then shifts it left by exactly half the aura's own
+   width, keeping it perfectly concentric behind the yin-yang SVG at any
+   viewport size without any calc() that would require hardcoded offsets.   */
+/* SVG: 148px. Aura: 220px. Vertical offset = (220 - 148) / 2 = 36px */
 .founders-logo-wrap::before {
   content: '';
   position: absolute;
   top: -36px;                      /* pulls aura up so it's centered on SVG */
-  left: calc(50% - 110px);        /* 110px = half of 220px aura width       */
+  left: 50%;                       /* percentage-based: always the horizontal midpoint */
+  transform: translateX(-50%);     /* shift left by half aura width — aura-drift overrides this per-frame */
   width: 220px; height: 220px;
   border-radius: 50%;
   background:
@@ -646,11 +658,12 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 @media (max-width: 720px) {
   .founders-grid { grid-template-columns: 1fr; }
   .founders-yin-yang { width: 112px; height: 112px; }
-  /* Aura: 180px. SVG: 112px. Offset = (180 - 112) / 2 = 34px */
+  /* Aura: 180px. SVG: 112px. Vertical offset = (180 - 112) / 2 = 34px     *
+   * left: 50% + translateX(-50%) is inherited from the static rule above — *
+   * no calc() needed here; horizontal centering stays fluid automatically.  */
   .founders-logo-wrap::before {
     width: 180px; height: 180px;
     top: -34px;
-    left: calc(50% - 90px);
   }
 }
 
@@ -889,6 +902,18 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   .post-date   { margin-left: 0; width: 100%; }
 }
 
+/* ── Global prose overflow protection ─────────────────────────────────────
+   Scoped to the three long-form sections. Prevents URLs, long technical
+   terms, or any unbreakable string from triggering horizontal scroll.
+   `overflow-wrap: break-word` only breaks when truly necessary;
+   `hyphens: none` keeps natural words whole (no mid-syllable splits).     */
+#manifesto p, #manifesto li,
+#vision    p, #vision    li,
+#community p, #community li {
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════
    MOBILE RESPONSIVE — Global overrides
@@ -998,9 +1023,16 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 
 @media (max-width: 480px) {
 
+  /* ── Container gutters: 24px per side is too wide on a 320–480px screen.
+     Drop to 16px so content gets more room without touching the desktop.  */
+  .container { padding: 0 16px; }
+  .hero-content { padding: 0 16px; }
+
   /* ── Navbar ultra-compact ───────────────────────────────────────────*/
   .nav-inner { padding: 10px 12px; }
   .logo { font-size: 1.05em; }
+  /* Keep the padding override but let min-height (set on desktop) handle *
+   * the tap-target height so the button is still comfortably tappable.   */
   .cta-btn { padding: 6px 10px; font-size: 0.8em; }
 
   /* ── Section headings: tighten bottom margin ────────────────────────*/
@@ -1034,4 +1066,52 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   .founder-card { padding: 20px 16px; gap: 14px; }
   .founder-initial { width: 44px; height: 44px; font-size: 1.2em; }
   .founder-name { font-size: 1.05em; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   VERY SMALL HANDSETS — ≤ 360px
+   Applies on top of the 480px block for devices like Moto G4, old
+   iPhones in portrait (320 × 568) and similarly narrow screens.
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+
+  /* ── Even tighter gutters: 12px per side on 320px gives 296px content */
+  .container { padding: 0 12px; }
+  .hero-content { padding: 0 12px; }
+
+  /* ── Navbar: hide logo wordmark on the smallest phones so the CTA fits */
+  .logo { font-size: 0.95em; letter-spacing: 0; }
+  .cta-btn { font-size: 0.75em; padding: 5px 8px; }
+
+  /* ── Hero heading: let clamp() shrink further at 320px */
+  .hero-content h1 { font-size: clamp(1.9em, 8vw, 2.6em); }
+
+  /* ── Stat numbers: 3em is too wide for 296px content */
+  .stat-num { font-size: 2.4em; }
+
+  /* ── Community panel: strip last 2px of padding */
+  .community-panel { padding: 14px 12px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LANDSCAPE ORIENTATION — phones rotated sideways
+   Target: viewport height ≤ 500px (landscape phone).
+   Hero at min-height:100vh on a rotated phone (e.g. 375px tall) pushes
+   all the hero content into a tiny strip. Override to a sensible fixed
+   height so the heading + buttons are visible without scrolling.
+═══════════════════════════════════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+
+  /* ── Reduce hero height so heading + buttons fit above the fold */
+  #hero { min-height: auto; padding: 80px 0 48px; }
+
+  /* ── Shrink heading so it doesn't crowd the buttons */
+  .hero-content h1 { font-size: clamp(1.6em, 5vw, 2.2em); margin-bottom: 14px; }
+  .hero-content p  { margin-bottom: 18px; }
+
+  /* ── Tighter section padding: 100px top/bottom is enormous in landscape */
+  section:not(#hero) { padding-top: 48px; padding-bottom: 48px; }
+
+  /* ── Navbar stays compact */
+  .nav-inner { padding: 8px 16px; }
 }
