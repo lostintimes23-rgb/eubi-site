@@ -21,6 +21,34 @@ window.addEventListener('scroll', () => {
   document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
 });
 
+// ── Mobile hamburger menu ─────────────────────────────────────────────────
+(function initHamburger() {
+  const toggle  = document.querySelector('.nav-toggle');
+  const menu    = document.querySelector('nav ul');
+  if (!toggle || !menu) return;
+
+  function closeMenu() {
+    menu.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = '☰';
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen);
+    toggle.textContent = isOpen ? '✕' : '☰';
+  });
+
+  // Close when any nav link is tapped
+  menu.querySelectorAll('a').forEach(link => link.addEventListener('click', closeMenu));
+
+  // Close when tapping outside the navbar
+  document.addEventListener('click', (e) => {
+    if (!toggle.closest('nav').contains(e.target)) closeMenu();
+  });
+})();
+
 // ── Fade-in on scroll ─────────────────────────────────────────────────────
 const fadeSelectors = [
   '.step-card', '.why-card', '.stat-card', '.roadmap-item',
