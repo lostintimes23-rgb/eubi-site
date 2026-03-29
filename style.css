@@ -492,6 +492,45 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
 .manifesto-close strong { color: var(--text); }
 .manifesto-close .gold { font-size: 1.1em; font-weight: 700; }
 
+/* ── THE SYSTEM OF TRUTH (MANIFESTO V2) ── */
+#manifesto-v2 { padding: 110px 0; background: #040408; border-top: 1px solid #1a1a2e; }
+#manifesto-v2 h2 { font-size: clamp(2em, 5vw, 3.2em); margin-bottom: 0; }
+
+.mv2-attribution {
+  display: block; margin-bottom: 8px;
+  font-size: 0.78em; letter-spacing: 3px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase;
+}
+
+.mv2-pillar-label {
+  font-size: 0.7em; letter-spacing: 4px; font-weight: 700;
+  color: #4a90d9; text-transform: uppercase; margin-bottom: 8px;
+}
+
+.mv2-num { color: #111122 !important; }
+.manifesto-principle:hover .mv2-num { color: #1a1a35 !important; }
+
+.mv2-mandates { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+
+.mv2-mandate {
+  background: #07070e; border-left: 3px solid #1a2a3a;
+  padding: 14px 18px; border-radius: 0 8px 8px 0;
+  font-size: 0.88em; color: var(--muted); line-height: 1.7;
+  transition: border-color 0.25s;
+}
+.mv2-mandate:hover { border-left-color: var(--gold); }
+.mv2-mandate strong { color: var(--text); font-weight: 700; }
+
+.mv2-sig {
+  margin-top: 24px; font-size: 1em; font-weight: 600;
+  color: var(--gold); letter-spacing: 1px;
+}
+
+@media (max-width: 640px) {
+  .mv2-mandates { gap: 8px; }
+  .mv2-mandate { padding: 12px 14px; }
+}
+
 /* ── HUMANITY HAS DONE THE IMPOSSIBLE ── */
 #impossible { padding: 110px 0; background: var(--bg2); }
 #impossible h2 { font-size: clamp(1.8em, 4vw, 3em); }
