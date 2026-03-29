@@ -114,39 +114,76 @@ function formatDate(iso) {
   });
 }
 
-// ── Comments display ──────────────────────────────────────────────────────
+// ── Community Board display ───────────────────────────────────────────────
+
+// Generate a consistent hue for a name so each avatar has its own colour.
+function nameToHue(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffff;
+  return h % 360;
+}
+
+function renderStars(rating) {
+  if (!rating || rating < 1) return '';
+  const filled = Math.min(5, Math.max(1, rating));
+  return '⭐'.repeat(filled);
+}
+
+function renderPost(p) {
+  const hue     = nameToHue(p.name);
+  const initial = escapeHtml(p.name.charAt(0).toUpperCase());
+  const name    = escapeHtml(p.name);
+  const text    = escapeHtml(p.text);
+  const date    = formatDate(p.created_at);
+
+  const badge  = p.role
+    ? `<span class="post-badge">${escapeHtml(p.role)}</span>`
+    : '';
+  const stars  = p.rating
+    ? `<span class="post-stars">${renderStars(p.rating)}</span>`
+    : '';
+  const tag    = p.source === 'feedback'
+    ? `<span class="post-type-tag feedback-tag">Feedback</span>`
+    : `<span class="post-type-tag comment-tag">Comment</span>`;
+
+  return `
+    <div class="post-card">
+      <div class="post-avatar" style="--hue:${hue}">${initial}</div>
+      <div class="post-body">
+        <div class="post-header">
+          <span class="post-name">${name}</span>
+          ${badge}
+          ${stars}
+          ${tag}
+          <span class="post-date">${date}</span>
+        </div>
+        <div class="post-text">${text}</div>
+      </div>
+    </div>`;
+}
 
 async function loadComments() {
   const list = document.getElementById('comments-list');
   if (!list) return;
 
-  // Show loading state
-  list.innerHTML = '<div class="comments-loading"><span class="comments-spinner"></span> Loading comments…</div>';
+  list.innerHTML = '<div class="comments-loading"><span class="comments-spinner"></span> Loading posts…</div>';
 
   try {
     const res = await fetch('/.netlify/functions/get-comments');
     if (!res.ok) throw new Error(`Function returned ${res.status}`);
 
-    const comments = await res.json();
+    const posts = await res.json();
 
-    if (!Array.isArray(comments) || comments.length === 0) {
-      list.innerHTML = '<p class="comments-empty">No comments yet — be the first to share your thoughts!</p>';
+    if (!Array.isArray(posts) || posts.length === 0) {
+      list.innerHTML = '<p class="comments-empty">No posts yet — be the first to share your thoughts!</p>';
       return;
     }
 
-    list.innerHTML = comments.map(c => `
-      <div class="comment-card">
-        <div class="comment-header">
-          <span class="comment-name">${escapeHtml(c.name)}</span>
-          <span class="comment-date">${formatDate(c.created_at)}</span>
-        </div>
-        <div class="comment-text">${escapeHtml(c.comment)}</div>
-      </div>
-    `).join('');
+    list.innerHTML = posts.map(renderPost).join('');
 
   } catch (err) {
     console.error('[loadComments]', err);
-    list.innerHTML = '<p class="comments-empty">Couldn\'t load comments right now — try refreshing.</p>';
+    list.innerHTML = '<p class="comments-empty">Couldn\'t load posts right now — try refreshing.</p>';
   }
 }
 
