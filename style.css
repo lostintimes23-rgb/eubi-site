@@ -882,3 +882,98 @@ footer p { color: var(--muted); font-size: 0.85em; line-height: 1.8; }
   .post-avatar { width: 34px; height: 34px; font-size: 0.9em; }
   .post-date   { margin-left: 0; width: 100%; }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Global overrides
+   Tablets / large phones : ≤ 768px
+   Small phones            : ≤ 480px
+═══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+
+  /* ── Section vertical padding ────────────────────────────────────────
+     The generic rule is `padding: 100px 0`; specific sections use
+     `padding: 110px 0`. Override both with padding-top/bottom so the
+     desktop shorthand value doesn't bleed onto mobile.                 */
+  section:not(#hero) { padding-top: 64px; padding-bottom: 64px; }
+  #manifesto, #manifesto-v2, #about-founders,
+  #impossible, #vision, #philosophy,
+  #proof, #build, #firststep,
+  #science, #schematics { padding-top: 64px; padding-bottom: 64px; }
+  #quote { padding-top: 72px; padding-bottom: 72px; }
+
+  /* ── Navbar ─────────────────────────────────────────────────────────
+     32px horizontal padding is too wide on a phone. Shrink to 16px and
+     tighten the gap so the logo + CTA button don't crowd each other.  */
+  .nav-inner { padding: 10px 16px; gap: 10px; }
+
+  /* ── Hero ───────────────────────────────────────────────────────────*/
+  .hero-content p { font-size: 1em; }
+  .btn-primary, .btn-secondary { padding: 12px 22px; font-size: 0.95em; }
+
+  /* ── Compare table: allow horizontal scroll instead of overflowing ─ */
+  .compare-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* ── Community panels ───────────────────────────────────────────────*/
+  .community-panel { padding: 24px 18px; }
+
+  /* ── Manifesto opening ──────────────────────────────────────────────*/
+  .manifesto-opening { margin: 24px auto 40px; font-size: 1em; }
+
+  /* ── Schematic tabs ─────────────────────────────────────────────────*/
+  .schematic-tabs { gap: 8px; }
+  .tab-btn { padding: 8px 14px; font-size: 0.85em; }
+
+  /* ── Phil timeline intermediate ─────────────────────────────────────*/
+  .phil-timeline { padding: 24px 18px; }
+
+  /* ── Impossible conclusion ──────────────────────────────────────────*/
+  .impossible-conclusion { padding: 32px 28px; }
+
+  /* ── Vision timeline intermediate column widths ─────────────────────*/
+  .vision-item { grid-template-columns: 100px 20px 1fr; }
+
+  /* ── Founders aura wrap: reduce top margin on tablet ───────────────*/
+  .founders-logo-wrap { margin: 32px auto 48px; }
+}
+
+@media (max-width: 480px) {
+
+  /* ── Navbar ultra-compact ───────────────────────────────────────────*/
+  .nav-inner { padding: 10px 12px; }
+  .logo { font-size: 1.05em; }
+  .cta-btn { padding: 6px 10px; font-size: 0.8em; }
+
+  /* ── Section headings: tighten bottom margin ────────────────────────*/
+  section h2 { margin-bottom: 32px; }
+
+  /* ── Star rating: larger tap targets on small screens ───────────────*/
+  .rating-stars { gap: 10px; }
+  .rating-stars span { font-size: 1.5em; opacity: 0.4; }
+
+  /* ── Community panels ───────────────────────────────────────────────*/
+  .community-panel { padding: 18px 14px; }
+  .panel-title { margin-bottom: 18px; }
+
+  /* ── Form inputs: slightly smaller padding on tiny screens ──────────*/
+  .eubi-form input[type="text"],
+  .eubi-form input[type="email"],
+  .eubi-form textarea,
+  .eubi-form select { padding: 10px 12px; font-size: 0.88em; }
+
+  /* ── Manifesto opening ──────────────────────────────────────────────*/
+  .manifesto-opening { padding: 18px 14px; font-size: 0.95em; }
+
+  /* ── Impossible conclusion ──────────────────────────────────────────*/
+  .impossible-conclusion { padding: 24px 16px; font-size: 0.97em; }
+
+  /* ── Schematic specs ────────────────────────────────────────────────*/
+  .schematic-specs { padding: 18px 14px; }
+
+  /* ── Founders: extra compact wrap ───────────────────────────────────*/
+  .founders-logo-wrap { margin: 24px auto 36px; gap: 14px; }
+  .founder-card { padding: 20px 16px; gap: 14px; }
+  .founder-initial { width: 44px; height: 44px; font-size: 1.2em; }
+  .founder-name { font-size: 1.05em; }
+}
